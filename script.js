@@ -28,18 +28,9 @@ function operate(operator, a, b) {
 /* ==========================================================
    PURE MATH FUNCTIONS
    ========================================================== */
-function add(a, b) {
-  return a + b;
-}
-
-function subtract(a, b) {
-  return a - b;
-}
-
-function multiply(a, b) {
-  return a * b;
-}
-
+function add(a, b) { return a + b; }
+function subtract(a, b) { return a - b; }
+function multiply(a, b) { return a * b; }
 function divide(a, b) {
   if (b === 0) return "Nope.";
   return a / b;
@@ -55,7 +46,6 @@ function updateDisplay(value) {
   display.textContent = formatNumber(value);
 }
 
-
 function clearDisplay() {
   display.textContent = "";
 }
@@ -65,28 +55,21 @@ function clearDisplay() {
    DISPLAY FORMATTING / OVERFLOW HANDLING
    ========================================================== */
 function formatNumber(value) {
-  // Convert to string for length checks
   let str = value.toString();
 
-  // If it's too long, try rounding
+  // Prevent scientific notation
+  if (str.includes("e")) return "Overflow";
+
+  // If too long, try rounding
   if (str.length > 12) {
-    // Attempt rounding to 10 decimal places
     let rounded = Number(value).toPrecision(10);
-
-    // If rounding still too long, show overflow
-    if (rounded.length > 12) {
-      return "Overflow";
-    }
-    // Prevent scientific notation
-    if (str.includes("e")) {
-      return "Overflow";
-    }
-
+    if (rounded.length > 12) return "Overflow";
     return rounded;
   }
 
   return str;
 }
+
 
 /* ==========================================================
    DECIMAL INPUT
@@ -131,9 +114,9 @@ function inputDigit(digit) {
   if (shouldResetScreen) {
     clearDisplay();
     shouldResetScreen = false;
-    clearOperatorHighlight();
-
   }
+
+  clearOperatorHighlight();
 
   if (currentOperator === null) {
     firstNumber += digit;
@@ -149,7 +132,7 @@ function inputDigit(digit) {
    OPERATOR INPUT
    ========================================================== */
 function inputOperator(op) {
-  // Prevent consecutive operators: replace operator
+  // Prevent consecutive operators
   if (currentOperator !== null && secondNumber === "") {
     currentOperator = op;
     return;
@@ -166,16 +149,14 @@ function inputOperator(op) {
   shouldResetScreen = true;
 }
 
+
 /* ==========================================================
    OPERATOR HIGHLIGHTING
    ========================================================== */
 function highlightOperator(button) {
-  // Remove highlight from previous operator
   if (activeOperatorButton) {
     activeOperatorButton.classList.remove("active-operator");
   }
-
-  // Add highlight to the new operator
   activeOperatorButton = button;
   activeOperatorButton.classList.add("active-operator");
 }
@@ -231,6 +212,25 @@ function backspace() {
 
 
 /* ==========================================================
+   NEGATION (+/-)
+   ========================================================== */
+function negate() {
+  if (shouldResetScreen) return;
+
+  if (currentOperator === null) {
+    if (firstNumber === "") return;
+    firstNumber = (Number(firstNumber) * -1).toString();
+    updateDisplay(firstNumber);
+    return;
+  }
+
+  if (secondNumber === "") return;
+  secondNumber = (Number(secondNumber) * -1).toString();
+  updateDisplay(secondNumber);
+}
+
+
+/* ==========================================================
    EVENT LISTENERS (BUTTONS)
    ========================================================== */
 const digitButtons = document.querySelectorAll(".digit");
@@ -238,6 +238,7 @@ const operatorButtons = document.querySelectorAll(".operator");
 const equalsButton = document.querySelector(".equals");
 const clearButton = document.querySelector(".clear");
 const backspaceButton = document.querySelector(".backspace");
+const negateButton = document.querySelector(".negate");
 
 digitButtons.forEach(btn => {
   btn.addEventListener("click", () => {
@@ -256,7 +257,6 @@ operatorButtons.forEach(btn =>
   })
 );
 
-
 equalsButton.addEventListener("click", () => {
   evaluate();
   clearOperatorHighlight();
@@ -268,6 +268,7 @@ clearButton.addEventListener("click", () => {
 });
 
 backspaceButton.addEventListener("click", backspace);
+negateButton.addEventListener("click", negate);
 
 
 /* ==========================================================
@@ -278,39 +279,40 @@ window.addEventListener("keydown", handleKeyboardInput);
 function handleKeyboardInput(e) {
   const key = e.key;
 
-  // Digits
   if (key >= "0" && key <= "9") {
     inputDigit(key);
     return;
   }
 
-  // Decimal
   if (key === ".") {
     appendDecimal();
     return;
   }
 
-  // Operators
   if (key === "+" || key === "-" || key === "*" || key === "/") {
     inputOperator(key);
     return;
   }
 
-  // Equals
   if (key === "Enter" || key === "=") {
     evaluate();
+    clearOperatorHighlight();
     return;
   }
 
-  // Backspace
   if (key === "Backspace") {
     backspace();
     return;
   }
 
-  // Clear
   if (key.toLowerCase() === "c" || key === "Escape") {
     clearAll();
+    clearOperatorHighlight();
+    return;
+  }
+
+  if (key === "n") {
+    negate();
     return;
   }
 }
