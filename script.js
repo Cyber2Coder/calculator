@@ -57,10 +57,8 @@ function clearDisplay() {
 function formatNumber(value) {
   let str = value.toString();
 
-  // Prevent scientific notation
   if (str.includes("e")) return "Overflow";
 
-  // If too long, try rounding
   if (str.length > 12) {
     let rounded = Number(value).toPrecision(10);
     if (rounded.length > 12) return "Overflow";
@@ -80,7 +78,6 @@ function appendDecimal() {
     shouldResetScreen = false;
   }
 
-  // First number
   if (currentOperator === null) {
     if (firstNumber === "") {
       firstNumber = "0.";
@@ -94,7 +91,6 @@ function appendDecimal() {
     return;
   }
 
-  // Second number
   if (secondNumber === "") {
     secondNumber = "0.";
     updateDisplay(secondNumber);
@@ -132,13 +128,11 @@ function inputDigit(digit) {
    OPERATOR INPUT
    ========================================================== */
 function inputOperator(op) {
-  // Prevent consecutive operators
   if (currentOperator !== null && secondNumber === "") {
     currentOperator = op;
     return;
   }
 
-  // Normal chaining
   if (currentOperator !== null && secondNumber !== "") {
     firstNumber = operate(currentOperator, firstNumber, secondNumber);
     secondNumber = "";
@@ -316,6 +310,8 @@ function handleKeyboardInput(e) {
     return;
   }
 }
+
+
 /* ==========================================================
    THEME TOGGLE
    ========================================================== */
@@ -324,7 +320,6 @@ const themeToggle = document.getElementById("theme-toggle");
 themeToggle.addEventListener("click", () => {
   document.documentElement.classList.toggle("light");
 
-  // Update icon
   if (document.documentElement.classList.contains("light")) {
     themeToggle.textContent = "☀️";
   } else {
