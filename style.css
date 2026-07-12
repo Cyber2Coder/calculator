@@ -89,60 +89,73 @@ button:hover {
 }
 
 /* ==========================================================
-   BRIGHT & COLORFUL LIGHT MODE
+   PASTEL CANDY LIGHT MODE
    ========================================================== */
 
 html.light body {
-  background: #ffffff;
-  color: #000000;
+  background: #fff7fb; /* soft cotton-candy pink */
+  color: #4a4a4a;
 }
 
 html.light .calculator {
   background: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 0 30px rgba(0,0,0,0.15);
+  border-radius: 18px;
+  box-shadow: 0 0 35px rgba(255, 182, 193, 0.35); /* pink glow */
+  border: 3px solid #ffe3f0; /* marshmallow border */
 }
 
 html.light .display {
-  background: #fefefe;
-  color: #222;
-  border: 2px solid #ffcc00;
+  background: #fff0f8; /* pale strawberry milk */
+  color: #5a5a5a;
+  border: 2px solid #ffd6e8;
+  border-radius: 12px;
 }
 
+/* Pastel buttons */
 html.light button {
-  background: #f0f0f0;
-  color: #000;
-  border-radius: 10px;
-  border: 1px solid #ddd;
+  background: #fdf2ff; /* lavender marshmallow */
+  color: #5a5a5a;
+  border-radius: 12px;
+  border: 1px solid #f7dfff;
+  font-weight: 600;
+  transition: transform 0.1s ease, background 0.2s ease;
 }
 
-/* Vibrant operator colors */
+html.light button:hover {
+  background: #fbe8ff;
+  transform: translateY(-2px);
+}
+
+/* Pastel operator buttons */
 html.light .operator {
-  background: linear-gradient(135deg, #ff9800, #ffc107);
-  color: #fff;
+  background: linear-gradient(135deg, #ffd1dc, #ffb7ce); /* strawberry + bubblegum */
+  color: #ffffff;
+  border: none;
 }
 
-/* Bright blue equals button */
+/* Pastel equals button */
 html.light .equals {
-  background: linear-gradient(135deg, #2196f3, #64b5f6);
-  color: #fff;
+  background: linear-gradient(135deg, #b5e8ff, #9ad7ff); /* cotton-candy blue */
+  color: #ffffff;
+  border: none;
 }
 
-/* Bold red clear button */
+/* Pastel clear button */
 html.light .clear {
-  background: linear-gradient(135deg, #f44336, #ef5350);
-  color: #fff;
+  background: linear-gradient(135deg, #ffb3b3, #ff9999); /* soft cherry */
+  color: #ffffff;
+  border: none;
 }
 
-/* Extra pop for digits */
+/* Pastel digits */
 html.light .digit {
-  background: #e8f5e9;
-  color: #1b5e20;
+  background: #e8ffe8; /* mint marshmallow */
+  color: #2e7d32;
   font-weight: bold;
 }
 
-/* Zero button stays wide and colorful */
+/* Wide zero button */
 html.light .zero {
-  background: #e3f2fd;
+  background: #e3f2fd; /* baby blue */
   color: #0d47a1;
 }
