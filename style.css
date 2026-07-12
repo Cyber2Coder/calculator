@@ -89,36 +89,60 @@ button:hover {
 }
 
 /* ==========================================================
-   LIGHT THEME
+   BRIGHT & COLORFUL LIGHT MODE
    ========================================================== */
+
 html.light body {
-  background: #f2f2f2;
-  color: #000;
+  background: #ffffff;
+  color: #000000;
 }
 
 html.light .calculator {
-  background: #fff;
-  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.15);
 }
 
 html.light .display {
-  background: #eee;
-  color: #333;
+  background: #fefefe;
+  color: #222;
+  border: 2px solid #ffcc00;
 }
 
 html.light button {
-  background: #ddd;
+  background: #f0f0f0;
   color: #000;
+  border-radius: 10px;
+  border: 1px solid #ddd;
 }
 
+/* Vibrant operator colors */
 html.light .operator {
-  background: #ffb74d;
+  background: linear-gradient(135deg, #ff9800, #ffc107);
+  color: #fff;
 }
 
+/* Bright blue equals button */
 html.light .equals {
-  background: #64b5f6;
+  background: linear-gradient(135deg, #2196f3, #64b5f6);
+  color: #fff;
 }
 
+/* Bold red clear button */
 html.light .clear {
-  background: #ef5350;
+  background: linear-gradient(135deg, #f44336, #ef5350);
+  color: #fff;
+}
+
+/* Extra pop for digits */
+html.light .digit {
+  background: #e8f5e9;
+  color: #1b5e20;
+  font-weight: bold;
+}
+
+/* Zero button stays wide and colorful */
+html.light .zero {
+  background: #e3f2fd;
+  color: #0d47a1;
 }
