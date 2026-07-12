@@ -156,34 +156,34 @@ button:active {
 
 
 /* Light theme */
-.light body {
+html.light body {
   background: #f2f2f2;
   color: #000;
 }
 
-.light .calculator {
+html.light .calculator {
   background: #fff;
   box-shadow: 0 0 20px rgba(0,0,0,0.1);
 }
 
-.light .display {
+html.light .display {
   background: #eee;
   color: #333;
 }
 
-.light button {
+html.light button {
   background: #ddd;
   color: #000;
 }
 
-.light .operator {
+html.light .operator {
   background: #ffb74d;
 }
 
-.light .equals {
+html.light .equals {
   background: #64b5f6;
 }
 
-.light .clear {
+html.light .clear {
   background: #ef5350;
 }
