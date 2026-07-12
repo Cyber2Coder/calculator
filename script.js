@@ -7,7 +7,6 @@ let currentOperator = null;
 let shouldResetScreen = false;
 let activeOperatorButton = null;
 
-
 /* ==========================================================
    CORE OPERATION DISPATCHER
    ========================================================== */
@@ -16,26 +15,12 @@ function operate(operator, a, b) {
   b = Number(b);
 
   switch (operator) {
-    case "+": return add(a, b);
-    case "-": return subtract(a, b);
-    case "*": return multiply(a, b);
-    case "/": return divide(a, b);
-    default: return null;
+    case "+": return a + b;
+    case "-": return a - b;
+    case "*": return a * b;
+    case "/": return b === 0 ? "Nope." : a / b;
   }
 }
-
-
-/* ==========================================================
-   PURE MATH FUNCTIONS
-   ========================================================== */
-function add(a, b) { return a + b; }
-function subtract(a, b) { return a - b; }
-function multiply(a, b) { return a * b; }
-function divide(a, b) {
-  if (b === 0) return "Nope.";
-  return a / b;
-}
-
 
 /* ==========================================================
    DISPLAY CONTROL
@@ -50,24 +35,19 @@ function clearDisplay() {
   display.textContent = "";
 }
 
-
 /* ==========================================================
-   DISPLAY FORMATTING / OVERFLOW HANDLING
+   DISPLAY FORMATTING
    ========================================================== */
 function formatNumber(value) {
   let str = value.toString();
-
   if (str.includes("e")) return "Overflow";
-
   if (str.length > 12) {
     let rounded = Number(value).toPrecision(10);
     if (rounded.length > 12) return "Overflow";
     return rounded;
   }
-
   return str;
 }
-
 
 /* ==========================================================
    DECIMAL INPUT
@@ -79,29 +59,16 @@ function appendDecimal() {
   }
 
   if (currentOperator === null) {
-    if (firstNumber === "") {
-      firstNumber = "0.";
-      updateDisplay(firstNumber);
-      return;
-    }
-    if (!firstNumber.includes(".")) {
-      firstNumber += ".";
-      updateDisplay(firstNumber);
-    }
+    if (firstNumber === "") firstNumber = "0.";
+    else if (!firstNumber.includes(".")) firstNumber += ".";
+    updateDisplay(firstNumber);
     return;
   }
 
-  if (secondNumber === "") {
-    secondNumber = "0.";
-    updateDisplay(secondNumber);
-    return;
-  }
-  if (!secondNumber.includes(".")) {
-    secondNumber += ".";
-    updateDisplay(secondNumber);
-  }
+  if (secondNumber === "") secondNumber = "0.";
+  else if (!secondNumber.includes(".")) secondNumber += ".";
+  updateDisplay(secondNumber);
 }
-
 
 /* ==========================================================
    DIGIT INPUT
@@ -123,7 +90,6 @@ function inputDigit(digit) {
   }
 }
 
-
 /* ==========================================================
    OPERATOR INPUT
    ========================================================== */
@@ -143,14 +109,11 @@ function inputOperator(op) {
   shouldResetScreen = true;
 }
 
-
 /* ==========================================================
    OPERATOR HIGHLIGHTING
    ========================================================== */
 function highlightOperator(button) {
-  if (activeOperatorButton) {
-    activeOperatorButton.classList.remove("active-operator");
-  }
+  if (activeOperatorButton) activeOperatorButton.classList.remove("active-operator");
   activeOperatorButton = button;
   activeOperatorButton.classList.add("active-operator");
 }
@@ -162,9 +125,8 @@ function clearOperatorHighlight() {
   }
 }
 
-
 /* ==========================================================
-   EVALUATION (=)
+   EVALUATION
    ========================================================== */
 function evaluate() {
   if (currentOperator && secondNumber !== "") {
@@ -176,9 +138,8 @@ function evaluate() {
   }
 }
 
-
 /* ==========================================================
-   CLEAR (AC)
+   CLEAR
    ========================================================== */
 function clearAll() {
   firstNumber = "";
@@ -186,7 +147,6 @@ function clearAll() {
   currentOperator = null;
   updateDisplay("0");
 }
-
 
 /* ==========================================================
    BACKSPACE
@@ -197,133 +157,89 @@ function backspace() {
   if (currentOperator === null) {
     firstNumber = firstNumber.slice(0, -1);
     updateDisplay(firstNumber || "0");
-    return;
+  } else {
+    secondNumber = secondNumber.slice(0, -1);
+    updateDisplay(secondNumber || "0");
   }
-
-  secondNumber = secondNumber.slice(0, -1);
-  updateDisplay(secondNumber || "0");
 }
 
-
 /* ==========================================================
-   NEGATION (+/-)
+   NEGATION
    ========================================================== */
 function negate() {
   if (shouldResetScreen) return;
 
   if (currentOperator === null) {
-    if (firstNumber === "") return;
-    firstNumber = (Number(firstNumber) * -1).toString();
-    updateDisplay(firstNumber);
-    return;
+    if (firstNumber !== "") {
+      firstNumber = (Number(firstNumber) * -1).toString();
+      updateDisplay(firstNumber);
+    }
+  } else {
+    if (secondNumber !== "") {
+      secondNumber = (Number(secondNumber) * -1).toString();
+      updateDisplay(secondNumber);
+    }
   }
-
-  if (secondNumber === "") return;
-  secondNumber = (Number(secondNumber) * -1).toString();
-  updateDisplay(secondNumber);
 }
 
-
 /* ==========================================================
-   EVENT LISTENERS (BUTTONS)
+   EVENT LISTENERS
    ========================================================== */
-const digitButtons = document.querySelectorAll(".digit");
-const operatorButtons = document.querySelectorAll(".operator");
-const equalsButton = document.querySelector(".equals");
-const clearButton = document.querySelector(".clear");
-const backspaceButton = document.querySelector(".backspace");
-const negateButton = document.querySelector(".negate");
-
-digitButtons.forEach(btn => {
+document.querySelectorAll(".digit").forEach(btn => {
   btn.addEventListener("click", () => {
-    if (btn.textContent === ".") {
-      appendDecimal();
-    } else {
-      inputDigit(btn.textContent);
-    }
+    btn.textContent === "." ? appendDecimal() : inputDigit(btn.textContent);
   });
 });
 
-operatorButtons.forEach(btn =>
+document.querySelectorAll(".operator").forEach(btn =>
   btn.addEventListener("click", () => {
     inputOperator(btn.textContent);
     highlightOperator(btn);
   })
 );
 
-equalsButton.addEventListener("click", () => {
+document.querySelector(".equals").addEventListener("click", () => {
   evaluate();
   clearOperatorHighlight();
 });
 
-clearButton.addEventListener("click", () => {
+document.querySelector(".clear").addEventListener("click", () => {
   clearAll();
   clearOperatorHighlight();
 });
 
-backspaceButton.addEventListener("click", backspace);
-negateButton.addEventListener("click", negate);
-
+document.querySelector(".backspace").addEventListener("click", backspace);
+document.querySelector(".negate").addEventListener("click", negate);
 
 /* ==========================================================
    KEYBOARD SUPPORT
    ========================================================== */
-window.addEventListener("keydown", handleKeyboardInput);
-
-function handleKeyboardInput(e) {
+window.addEventListener("keydown", e => {
   const key = e.key;
 
-  if (key >= "0" && key <= "9") {
-    inputDigit(key);
-    return;
-  }
-
-  if (key === ".") {
-    appendDecimal();
-    return;
-  }
-
-  if (key === "+" || key === "-" || key === "*" || key === "/") {
-    inputOperator(key);
-    return;
-  }
-
-  if (key === "Enter" || key === "=") {
+  if (key >= "0" && key <= "9") inputDigit(key);
+  else if (key === ".") appendDecimal();
+  else if (["+", "-", "*", "/"].includes(key)) inputOperator(key);
+  else if (key === "Enter" || key === "=") {
     evaluate();
     clearOperatorHighlight();
-    return;
   }
-
-  if (key === "Backspace") {
-    backspace();
-    return;
-  }
-
-  if (key.toLowerCase() === "c" || key === "Escape") {
+  else if (key === "Backspace") backspace();
+  else if (key.toLowerCase() === "c" || key === "Escape") {
     clearAll();
     clearOperatorHighlight();
-    return;
   }
-
-  if (key === "n") {
-    negate();
-    return;
-  }
-}
-
+  else if (key === "n") negate();
+});
 
 /* ==========================================================
    THEME TOGGLE
    ========================================================== */
-
-  const themeToggle = document.getElementById("theme-toggle");
+const themeToggle = document.getElementById("theme-toggle");
 
 themeToggle.addEventListener("click", () => {
   document.documentElement.classList.toggle("light");
 
-  if (document.documentElement.classList.contains("light")) {
-    themeToggle.textContent = "☀️";
-  } else {
-    themeToggle.textContent = "🌙";
-  }
+  themeToggle.textContent =
+    document.documentElement.classList.contains("light") ? "☀️" : "🌙";
 });
