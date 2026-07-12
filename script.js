@@ -316,3 +316,18 @@ function handleKeyboardInput(e) {
     return;
   }
 }
+/* ==========================================================
+   THEME TOGGLE
+   ========================================================== */
+const themeToggle = document.getElementById("theme-toggle");
+
+themeToggle.addEventListener("click", () => {
+  document.documentElement.classList.toggle("light");
+
+  // Update icon
+  if (document.documentElement.classList.contains("light")) {
+    themeToggle.textContent = "☀️";
+  } else {
+    themeToggle.textContent = "🌙";
+  }
+});
